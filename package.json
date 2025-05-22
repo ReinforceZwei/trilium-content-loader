@@ -1,0 +1,24 @@
+{
+  "name": "trilium-content-loader",
+  "version": "1.0.0",
+  "description": "An Astro content loader for Trilium notes.",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "ReinforceZwei",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.0.0",
+    "astro": "^5.7.13",
+    "cheerio": "^1.0.0"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0"
+  },
+  "peerDependencies": {
+    "astro": "^5.7.13"
+  }
+}

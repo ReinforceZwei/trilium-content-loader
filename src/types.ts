@@ -1,4 +1,5 @@
 import { LoaderContext } from "astro/loaders";
+import { TriliumApi } from "TriliumApi.js";
 import { z } from "zod";
 export type TriliumLoaderOptions<Schema = any> = {
   /**
@@ -29,12 +30,6 @@ export type TriliumLoaderOptions<Schema = any> = {
    */
   contentNoteDepth?: number;
   /**
-   * Load child notes under the content note. Default is `false`.
-   * Specify a number as the depth of child notes to load.
-   * Set to `true` without providing a number defaults to load 1 level of child notes.
-   */
-  loadChildNotes?: boolean | number;
-  /**
    * Load all parent notes of the content note. Default is `false`
    */
   loadParentNotes?: boolean;
@@ -56,7 +51,9 @@ export type TriliumLoader = {
   load: (context: LoaderContext) => Promise<void>
 }
 
-export type ContentProcessorConfig = Pick<TriliumLoaderOptions, 'url' | 'apiKey'>
+export type ContentProcessorConfig = Pick<TriliumLoaderOptions, 'url' | 'apiKey'> & {
+  api: TriliumApi
+}
 export type ContentProcessor = 
   ((content: string) => string | Promise<string>) |
   ((content: string, config: ContentProcessorConfig) => string | Promise<string>)

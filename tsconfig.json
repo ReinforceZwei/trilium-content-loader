@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2020",
+    "target": "ES6",
     "module": "NodeNext",
     "declaration": true,
     "outDir": "./dist",
@@ -20,6 +20,6 @@
       "*": ["*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "tests"]
+  "include": ["**/*"],
+  "exclude": ["dist", "tests"]
 }

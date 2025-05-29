@@ -1,3 +1,4 @@
+// @ts-ignore
 import { getImage } from "astro:assets";
 import type { ContentProcessor } from "../types.js";
 

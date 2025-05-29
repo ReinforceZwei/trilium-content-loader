@@ -78,41 +78,6 @@ const UtcDateTime = z.string().regex(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3
   message: 'UtcDateTime must be in format YYYY-MM-DD HH:mm:ss.SSSZ',
 });
 
-// Note schema
-const NoteSchema = z.object({
-  noteId: EntityId.readonly(),
-  title: z.string(),
-  type: z.enum([
-    'text',
-    'code',
-    'render',
-    'file',
-    'image',
-    'search',
-    'relationMap',
-    'book',
-    'noteMap',
-    'mermaid',
-    'webView',
-    'shortcut',
-    'doc',
-    'contentWidget',
-    'launcher',
-  ]),
-  mime: z.string(),
-  isProtected: z.boolean().readonly(),
-  blobId: z.string().describe('ID of the blob object which effectively serves as a content hash'),
-  attributes: z.array(z.any()).readonly().describe('Reference to AttributeList'), // Forward reference handled via z.any()
-  parentNoteIds: EntityIdList.readonly(),
-  childNoteIds: EntityIdList.readonly(),
-  parentBranchIds: EntityIdList.readonly(),
-  childBranchIds: EntityIdList.readonly(),
-  dateCreated: LocalDateTime,
-  dateModified: LocalDateTime.readonly(),
-  utcDateCreated: UtcDateTime,
-  utcDateModified: UtcDateTime.readonly(),
-});
-
 // Branch schema
 const BranchSchema = z.object({
   branchId: EntityId,
@@ -123,12 +88,6 @@ const BranchSchema = z.object({
   isExpanded: z.boolean(),
   utcDateModified: UtcDateTime.readonly(),
 }).describe('Branch places the note into the tree, it represents the relationship between a parent note and child note');
-
-// NoteWithBranch schema
-const NoteWithBranchSchema = z.object({
-  note: NoteSchema,
-  branch: BranchSchema,
-});
 
 // Attachment schema
 const AttachmentSchema = z.object({
@@ -168,6 +127,47 @@ const AttributeSchema = z.object({
   isInheritable: z.boolean(),
   utcDateModified: UtcDateTime.readonly(),
 }).describe('Attribute (Label, Relation) is a key-value record attached to a note.');
+
+// Note schema
+const NoteSchema = z.object({
+  noteId: EntityId.readonly(),
+  title: z.string(),
+  type: z.enum([
+    'text',
+    'code',
+    'render',
+    'file',
+    'image',
+    'search',
+    'relationMap',
+    'book',
+    'noteMap',
+    'mermaid',
+    'webView',
+    'shortcut',
+    'doc',
+    'contentWidget',
+    'launcher',
+  ]),
+  mime: z.string(),
+  isProtected: z.boolean().readonly(),
+  blobId: z.string().describe('ID of the blob object which effectively serves as a content hash'),
+  attributes: z.array(AttributeSchema).readonly().describe('Reference to AttributeList'),
+  parentNoteIds: EntityIdList.readonly(),
+  childNoteIds: EntityIdList.readonly(),
+  parentBranchIds: EntityIdList.readonly(),
+  childBranchIds: EntityIdList.readonly(),
+  dateCreated: LocalDateTime,
+  dateModified: LocalDateTime.readonly(),
+  utcDateCreated: UtcDateTime,
+  utcDateModified: UtcDateTime.readonly(),
+});
+
+// NoteWithBranch schema
+const NoteWithBranchSchema = z.object({
+  note: NoteSchema,
+  branch: BranchSchema,
+});
 
 // AttributeList schema
 const AttributeListSchema = z.array(AttributeSchema);

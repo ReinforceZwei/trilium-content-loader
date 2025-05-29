@@ -1,7 +1,10 @@
 {
-  "name": "trilium-content-loader",
+  "name": "@reinforcezwei/trilium-content-loader",
   "version": "1.0.0",
   "description": "An Astro content loader for Trilium notes.",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "main": "dist/index.js",
   "scripts": {

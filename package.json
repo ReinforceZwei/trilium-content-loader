@@ -9,7 +9,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "tsc"
   },
   "keywords": [],
   "author": "ReinforceZwei",

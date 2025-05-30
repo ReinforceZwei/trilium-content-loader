@@ -51,7 +51,12 @@ export function triliumLoader<Schema extends Record<string, unknown> = any>(
 
     let modifiedContent = content;
     for (const processor of options.contentProcessor) {
-      modifiedContent = await processor(modifiedContent, { url, apiKey, api });
+      try {
+        modifiedContent = await processor(modifiedContent, { url, apiKey, api });
+      } catch (error) {
+        console.warn(`Content processor failed: ${error instanceof Error ? error.message : String(error)}`);
+        // Continue with the next processor using the current content
+      }
     }
     return modifiedContent;
   }

@@ -1,7 +1,7 @@
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { Code } from 'astro/components';
 import * as cheerio from 'cheerio';
-import type { ContentProcessor } from "../types.js";
+import type { ContentProcessor, NoteWithContent } from "../types.js";
 
 // This regex cannot cover all cases
 // Full language list of trilium at 
@@ -36,7 +36,7 @@ export function astroCodeBlock(options?: AstroCodeBlockOptions): ContentProcesso
     component = Code,
     componentProps = (code: string, language: string) => ({ code, lang: language })
   } = options || {};
-  return async (content: string) => {
+  return async ({ content }: NoteWithContent) => {
     const container = await AstroContainer.create();
     const $ = cheerio.load(content);
     const codeBlocks = $('pre > code');

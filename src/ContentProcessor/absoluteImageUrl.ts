@@ -1,4 +1,4 @@
-import type { ContentProcessorConfig, ContentProcessor } from "../types.js";
+import type { ContentProcessorConfig, ContentProcessor, NoteWithContent } from "../types.js";
 
 /**
  * Replace image relative URLs with shared Trilium URLs.
@@ -8,7 +8,7 @@ import type { ContentProcessorConfig, ContentProcessor } from "../types.js";
  */
 export function absoluteImageUrls(): ContentProcessor {
   const regex = /<img[^>]+src="([^"]+)"[^>]*>/g;
-  return (content: string, config: ContentProcessorConfig) => {
+  return ({ content }: NoteWithContent, config: ContentProcessorConfig) => {
     let result = content;
     for (const match of content.matchAll(regex)) {
       const [fullMatch, src] = match;

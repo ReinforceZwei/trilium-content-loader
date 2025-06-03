@@ -1,4 +1,4 @@
-import type { ContentProcessorConfig, ContentProcessor, Note } from "../types.js";
+import type { ContentProcessorConfig, ContentProcessor, Note, NoteWithContent } from "../types.js";
 import * as cheerio from 'cheerio';
 
 /**
@@ -18,7 +18,7 @@ export function internalReferenceLink(config: {
   getUrl: (note: Note) => string | null;
 }): ContentProcessor {
   const { getUrl } = config;
-  return async (content: string, config: ContentProcessorConfig) => {
+  return async ({ content }: NoteWithContent, config: ContentProcessorConfig) => {
     const { api } = config;
     const $ = cheerio.load(content);
 

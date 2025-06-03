@@ -1,6 +1,7 @@
 import type { LoaderContext } from 'astro/loaders';
-import type { TriliumLoaderOptions, Note, TriliumLoader } from './types.js';
+import type { TriliumLoaderOptions, Note, TriliumLoader, NoteWithContent } from './types.js';
 import { TriliumApi } from './TriliumApi.js';
+import { processContent } from './ContentProcessor/index.js';
 
 const getDefaultSlug = (note: Note) => note.noteId;
 
@@ -11,6 +12,7 @@ export function triliumLoader<Schema extends Record<string, unknown> = any>(
     url,
     apiKey,
     noteId,
+    contentProcessor,
     contentNoteDepth = 1,
     loadParentNotes = false,
   } = options;
@@ -43,24 +45,6 @@ export function triliumLoader<Schema extends Record<string, unknown> = any>(
     return allNotes;
   }
 
-  async function processContent(content: string) {
-    if (!content) return content;
-    if (!options.contentProcessor || !options.contentProcessor.length) {
-      return content;
-    }
-
-    let modifiedContent = content;
-    for (const processor of options.contentProcessor) {
-      try {
-        modifiedContent = await processor(modifiedContent, { url, apiKey, api });
-      } catch (error) {
-        console.warn(`Content processor failed: ${error instanceof Error ? error.message : String(error)}`);
-        // Continue with the next processor using the current content
-      }
-    }
-    return modifiedContent;
-  }
-
   async function processAndStoreNote(
     note: Note,
     context: LoaderContext,
@@ -68,7 +52,11 @@ export function triliumLoader<Schema extends Record<string, unknown> = any>(
     const { transformEntry, slug } = options;
     const { store } = context;
     const content = await api.getNoteContent(note.noteId);
-    const processedContent = await processContent(content);
+    const noteWithContent: NoteWithContent = { ...note, content }
+    const processedContent = await processContent(noteWithContent, {
+      processor: contentProcessor || [],
+      config: { api, url, apiKey }
+    });
     
     const baseData = {
       ...note,

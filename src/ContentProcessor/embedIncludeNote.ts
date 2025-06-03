@@ -1,5 +1,6 @@
-import type { ContentProcessorConfig, ContentProcessor } from "../types.js";
+import type { ContentProcessorConfig, ContentProcessor, NoteWithContent } from "../types.js";
 import * as cheerio from 'cheerio';
+import { processContent } from "./index.js";
 
 /**
  * Process note embed/include sections in the content.
@@ -13,22 +14,9 @@ export function embedIncludeNote(config?: {
 }): ContentProcessor {
   const { contentProcessor = [] } = config || {};
 
-  async function processContent(content: string, config: ContentProcessorConfig) {
-    if (!content) return content;
-    if (!contentProcessor || !contentProcessor.length) {
-      return content;
-    }
-
-    let modifiedContent = content;
-    for (const processor of contentProcessor) {
-      modifiedContent = await processor(modifiedContent, config);
-    }
-    return modifiedContent;
-  }
-
-  return async (content: string, config: ContentProcessorConfig) => {
+  return async (note: NoteWithContent, config: ContentProcessorConfig) => {
     const { api } = config;
-    const $ = cheerio.load(content);
+    const $ = cheerio.load(note.content);
 
     const includeSections = $('section.include-note');
     for (const section of includeSections) {
@@ -42,9 +30,13 @@ export function embedIncludeNote(config?: {
         if (!note) continue;
 
         // Replace the section content with the note content from noteContent
-        const noteContent = await api.getNoteContent(noteId);
-        if (noteContent) {
-          $section.html(await processContent(noteContent, config));
+        const content = await api.getNoteContent(noteId);
+        const noteWithContent: NoteWithContent = { ...note, content }
+        if (content) {
+          $section.html(await processContent(noteWithContent, {
+            processor: contentProcessor,
+            config: config,
+          }));
         }
       } catch (error) {
         console.warn(`Failed to embed note content for note ${noteId}:`, error);

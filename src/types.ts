@@ -55,8 +55,8 @@ export type ContentProcessorConfig = Pick<TriliumLoaderOptions, 'url' | 'apiKey'
   api: TriliumApi
 }
 export type ContentProcessor = 
-  ((content: string) => string | Promise<string>) |
-  ((content: string, config: ContentProcessorConfig) => string | Promise<string>)
+  ((note: NoteWithContent) => string | Promise<string>) |
+  ((note: NoteWithContent, config: ContentProcessorConfig) => string | Promise<string>)
 
 
 // Base schemas for reused types
@@ -163,6 +163,10 @@ const NoteSchema = z.object({
   utcDateModified: UtcDateTime.readonly(),
 });
 
+const NoteWithContentSchema = NoteSchema.extend({
+  content: z.string(),
+})
+
 // NoteWithBranch schema
 const NoteWithBranchSchema = z.object({
   note: NoteSchema,
@@ -179,6 +183,7 @@ const SearchResponseSchema = z.object({
 }).strict();
 
 export type Note = z.infer<typeof NoteSchema>;
+export type NoteWithContent = z.infer<typeof NoteWithContentSchema>;
 export type Branch = z.infer<typeof BranchSchema>;
 export type Attachment = z.infer<typeof AttachmentSchema>;
 export type Attribute = z.infer<typeof AttributeSchema>;
@@ -190,6 +195,7 @@ export {
   LocalDateTime,
   UtcDateTime,
   NoteSchema,
+  NoteWithContentSchema,
   BranchSchema,
   NoteWithBranchSchema,
   AttachmentSchema,

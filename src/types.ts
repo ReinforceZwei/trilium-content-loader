@@ -36,10 +36,12 @@ export type TriliumLoaderOptions<Schema = any> = {
   /**
    * Transform the note entry to a custom schema. This is optional.
    * This is useful if you want to load the content in a specific format.
-   * @param note 
-   * @returns 
+   * The function can be either synchronous or asynchronous.
+   * @param note The note object to transform
+   * @param content The content of the note
+   * @returns The transformed schema or a Promise of the transformed schema
    */
-  transformEntry?: (note: Note, content: string) => Schema;
+  transformEntry?: (note: Note, content: string) => Schema | Promise<Schema>;
   /**
    * Process the content of the note to better suit for Astro
    */

@@ -64,7 +64,9 @@ export function triliumLoader<Schema extends Record<string, unknown> = any>(
       content: processedContent,
     };
 
-    const data = transformEntry ? transformEntry(note, processedContent) : (baseData as unknown as Schema);
+    const data = transformEntry 
+      ? await Promise.resolve(transformEntry(note, processedContent))
+      : (baseData as unknown as Schema);
 
     const parsedData = await context.parseData({
       id: baseData.slug,

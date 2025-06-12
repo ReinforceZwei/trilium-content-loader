@@ -6,7 +6,6 @@ import { GetImageResult } from "astro";
 
 /**
  * Optimize remote image URLs in the content using Astro image service
- * @deprecated This method does not work in syncing content phase. Use `optimizeRemoteImage` function at render time to optimize the images
  * @param content
  * @returns 
  */
@@ -40,7 +39,6 @@ export async function optimizeRemoteImage(content: string): Promise<string> {
 
 /**
  * Optimize local image URLs in the content using Astro image service
- * @deprecated This method does not work in syncing content phase. Use `optimizeImage` function at render time to optimize the images
  * @param content
  * @returns 
  */

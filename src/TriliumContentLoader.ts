@@ -88,8 +88,17 @@ export function triliumLoader<Schema extends Record<string, unknown> = any>(
       if (!loadParentNotes) {
         childNotes = childNotes.filter(note => note.depth === contentNoteDepth);
       }
+      const loadedNotes = new Set<string>();
       for (const { note: childNote } of childNotes) {
         await processAndStoreNote(childNote, context);
+        loadedNotes.add(childNote.noteId)
+      }
+      // delete entry in store but not in loaded notes
+      // handle deleted note
+      for (const key of context.store.keys()) {
+        if (!loadedNotes.has(key)) {
+          context.store.delete(key);
+        }
       }
     }
   };

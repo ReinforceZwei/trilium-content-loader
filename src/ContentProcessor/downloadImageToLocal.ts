@@ -27,7 +27,7 @@ export function downloadImageToLocal(config?: DownloadImageToLocalConfig): Conte
 
     const attachments = await api.getNoteAttachments(note.noteId);
 
-    const $ = cheerio.load(content);
+    const $ = cheerio.load(content, {}, false);
     const imgNodes = $('img');
     for (const imgNode of imgNodes) {
       const $imgNode = $(imgNode);

@@ -54,7 +54,7 @@ export function optimizeLocalImageUrls(): ContentProcessor {
  * @returns 
  */
 export async function optimizeImage(content: string): Promise<string> {
-  const $ = cheerio.load(content);
+  const $ = cheerio.load(content, {}, false);
   const imgNodes = $('img');
   // The path must be hardcoded for glob to work. Passing variable does not work
   /* @ts-expect-error */

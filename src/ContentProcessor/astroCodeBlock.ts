@@ -38,7 +38,7 @@ export function astroCodeBlock(options?: AstroCodeBlockOptions): ContentProcesso
   } = options || {};
   return async ({ content }: NoteWithContent) => {
     const container = await AstroContainer.create();
-    const $ = cheerio.load(content);
+    const $ = cheerio.load(content, {}, false);
     const codeBlocks = $('pre > code');
     for (const element of codeBlocks.toArray()) {
       const codeElement = $(element);

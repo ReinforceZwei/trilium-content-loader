@@ -16,7 +16,7 @@ export function embedIncludeNote(config?: {
 
   return async (note: NoteWithContent, config: ContentProcessorConfig) => {
     const { api } = config;
-    const $ = cheerio.load(note.content);
+    const $ = cheerio.load(note.content, {}, false);
 
     const includeSections = $('section.include-note');
     for (const section of includeSections) {

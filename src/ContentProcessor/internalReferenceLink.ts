@@ -20,7 +20,7 @@ export function internalReferenceLink(config: {
   const { getUrl } = config;
   return async ({ content }: NoteWithContent, config: ContentProcessorConfig) => {
     const { api } = config;
-    const $ = cheerio.load(content);
+    const $ = cheerio.load(content, {}, false);
 
     const referenceLinks = $('a.reference-link');
     for (const link of referenceLinks) {

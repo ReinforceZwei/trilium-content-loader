@@ -3,8 +3,6 @@ import type { TriliumLoaderOptions, Note, TriliumLoader, NoteWithContent } from 
 import { TriliumApi } from './TriliumApi.js';
 import { processContent } from './ContentProcessor/index.js';
 
-const getDefaultSlug = (note: Note) => note.noteId;
-
 export function triliumLoader<Schema extends Record<string, unknown> = any>(
   options: TriliumLoaderOptions<Schema>
 ): TriliumLoader {
@@ -49,7 +47,7 @@ export function triliumLoader<Schema extends Record<string, unknown> = any>(
     note: Note,
     context: LoaderContext,
   ) {
-    const { transformEntry, slug } = options;
+    const { transformEntry } = options;
     const { store } = context;
     const content = await api.getNoteContent(note.noteId);
     const noteWithContent: NoteWithContent = { ...note, content }
@@ -60,7 +58,6 @@ export function triliumLoader<Schema extends Record<string, unknown> = any>(
     
     const baseData = {
       ...note,
-      slug: slug ? slug(note) : getDefaultSlug(note),
       content: processedContent,
     };
 
@@ -69,12 +66,12 @@ export function triliumLoader<Schema extends Record<string, unknown> = any>(
       : (baseData as unknown as Schema);
 
     const parsedData = await context.parseData({
-      id: baseData.slug,
+      id: note.noteId,
       data
     });
 
     store.set({
-      id: baseData.slug,
+      id: note.noteId,
       data: parsedData,
       digest: context.generateDigest(parsedData),
       body: processedContent,

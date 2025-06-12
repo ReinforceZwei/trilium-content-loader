@@ -18,12 +18,6 @@ export type TriliumLoaderOptions<Schema = any> = {
    */
   noteId: string;
   /**
-   * Slug of the note to load content from. This is optional. If not provided, the noteId will be used.
-   * @param note 
-   * @returns 
-   */
-  slug?: (note: Note) => string;
-  /**
    * The depth of the content note. Default is 1.
    * For example, 1 mean the content notes are directly under the parent note; 
    * 2 mean there is one more level of notes under the parent note.
